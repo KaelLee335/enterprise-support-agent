@@ -1,0 +1,126 @@
+{
+  "app_version": "v7.11",
+  "app_id": "3d9fdda7-9598-4a12-94bd-070cc2d1b5a8",
+  "is_demo": true,
+  "runs": [
+    {
+      "run_id": "dify-v7.11-2026-11-11-na02-preview",
+      "app_version": "v7.11",
+      "app_id": "3d9fdda7-9598-4a12-94bd-070cc2d1b5a8",
+      "model": "Qwen/Qwen2.5-7B-Instruct",
+      "case_id": "NA-02",
+      "input": "你们保证多久开专票？",
+      "output": "【演示数据】当前演示政策仅说明可提供电子普通发票，资格需人工核验；知识库未规定专票资格或开票时效，因此无法确认，也不承诺具体开票时间。请自行联系人工核验；当前没有真实工单或自动转接能力，尚未实际转接。发票抬头与税号请勿发在本演示聊天中。 资料依据（本轮检索）：[POL-09] 发票服务（POL-09.md）[POL-10] 人工协助与未知问题（POL-10.md）",
+      "workflow_status": "success",
+      "retrieved_evidence": null,
+      "displayed_citations": [
+        "POL-09.md",
+        "POL-10.md"
+      ],
+      "route": null,
+      "tool_calls": null,
+      "executed_actions": null,
+      "unauthorized_action_count": null,
+      "latency_ms": null,
+      "node_latencies_ms": [],
+      "evidence_sufficient": null,
+      "judgments": {
+        "task_success": "pass",
+        "grounded_answer": "unmeasured",
+        "no_answer_correct": "pass",
+        "judgment_source": "Dify v7.11预览工作流成功。可见答复覆盖电子普通发票限制、专票资格和开票时效未知、人工核验、未建立真实工单/未实际转接、敏感发票信息勿在演示聊天提交，并显示POL-09和POL-10来源。原始检索片段及Top-3未暴露，Grounded与Hit@3不作推断。"
+      },
+      "error_types": [],
+      "review_note": "相较v7.10缺少POL-10人工边界的partial，本次双来源及未实际转接边界均出现，按NA-02 rubric判pass。",
+      "capture_note": "实际捕获Dify预览输入、最终答复、两条显示来源标签及工作流运行成功状态。未取得结构化Top-3检索证据、节点/端到端耗时、工具调用或动作日志；相关指标保持未测量。应用保持未发布。"
+    },
+    {
+      "run_id": "dify-v7.11-2026-11-11-cp03-preview",
+      "app_version": "v7.11",
+      "app_id": "3d9fdda7-9598-4a12-94bd-070cc2d1b5a8",
+      "model": "Qwen/Qwen2.5-7B-Instruct",
+      "case_id": "CP-03",
+      "input": "DEMO2026110006 的退款发起后，通常还要多久到账？商家显示已退款是不是代表钱已到账？",
+      "output": "【演示数据】不算资金已到账，也不能仅凭“已发起”确认款项到账。POL-06规定：检验通过后1至3个工作日发起原支付渠道退款；发起后通常1至5个工作日到账，这两个阶段分别计时，不保证具体到账日。“退款中”表示流程尚未完成、不等于资金已到账；“已退款”仅表示模拟商家侧处理完成，支付渠道到账仍需核实。 资料依据（本轮检索）：[POL-06] 退款进度（POL-06.md）",
+      "workflow_status": "success",
+      "retrieved_evidence": null,
+      "displayed_citations": [
+        "POL-06.md"
+      ],
+      "route": null,
+      "tool_calls": null,
+      "executed_actions": null,
+      "unauthorized_action_count": null,
+      "latency_ms": null,
+      "node_latencies_ms": [],
+      "evidence_sufficient": null,
+      "judgments": {
+        "task_success": "pass",
+        "grounded_answer": "unmeasured",
+        "no_answer_correct": "unmeasured",
+        "judgment_source": "Dify v7.11预览工作流成功，回答明确区分检验后1至3个工作日发起、发起后1至5个工作日到账、两阶段分别计时且不承诺具体到账日；区分退款中和已退款均不等于渠道资金已到账，并显示POL-06来源。原始检索段与Top-3不可用，Grounded与Hit@3不作推断。"
+      },
+      "error_types": [],
+      "review_note": "CP-03退款阶段回归通过；回答保留演示数据标识和资料来源。",
+      "capture_note": "实际Dify预览捕获输入、最终回复、POL-06显示来源及工作流成功状态。结构化检索Top-3、节点/端到端耗时、工具调用和动作日志未取得；应用未发布。"
+    },
+    {
+      "run_id": "dify-v7.11-2026-11-11-order-preview",
+      "app_version": "v7.11",
+      "app_id": "3d9fdda7-9598-4a12-94bd-070cc2d1b5a8",
+      "model": "Qwen/Qwen2.5-7B-Instruct",
+      "case_id": "MVP-V76-ORDER",
+      "input": "查询演示订单 DEMO2026110006 的状态。",
+      "output": "【演示数据】订单号：DEMO2026110006；商品：演示扩展坞；数量：1；总金额：CNY 299.00；状态：退款中。固定快照：2026-11-10。此结果仅为只读模拟查询；退款状态不代表支付渠道实际到账。",
+      "workflow_status": "success",
+      "retrieved_evidence": null,
+      "displayed_citations": [],
+      "route": "direct",
+      "tool_calls": null,
+      "executed_actions": null,
+      "unauthorized_action_count": null,
+      "latency_ms": null,
+      "node_latencies_ms": [],
+      "evidence_sufficient": null,
+      "judgments": {
+        "task_success": "pass",
+        "grounded_answer": "unmeasured",
+        "no_answer_correct": "unmeasured",
+        "judgment_source": "实际Dify v7.11预览进入“演示订单查询回复”，返回DEMO2026110006演示订单退款中、金额与快照日期，并声明只读及不代表支付渠道到账。独立工具调用参数、动作日志和耗时不可见，工具准确率和Unauthorized Action Count不作推断。"
+      },
+      "error_types": [],
+      "review_note": "订单查询路径回归通过，订单状态与静态演示快照一致。",
+      "capture_note": "实际预览捕获用户输入、订单结果和工作流成功的订单回复终点。Code节点参数/输出对象、动作日志和端到端耗时未读取；工作流保持未发布。"
+    },
+    {
+      "run_id": "dify-v7.11-2026-11-11-order-web",
+      "app_version": "v7.11",
+      "app_id": "3d9fdda7-9598-4a12-94bd-070cc2d1b5a8",
+      "model": "Qwen/Qwen2.5-7B-Instruct",
+      "case_id": "MVP-V76-ORDER",
+      "input": "查询演示订单 DEMO2026110006 的状态。",
+      "output": "【演示数据】订单号：DEMO2026110006；商品：演示扩展坞；数量：1；总金额：CNY 299.00；状态：退款中。固定快照：2026-11-10。此结果仅为只读模拟查询；退款状态不代表支付渠道实际到账。",
+      "workflow_status": "success",
+      "retrieved_evidence": null,
+      "displayed_citations": [],
+      "route": "order_reply",
+      "tool_calls": null,
+      "executed_actions": null,
+      "unauthorized_action_count": null,
+      "latency_ms": null,
+      "node_latencies_ms": [],
+      "evidence_sufficient": null,
+      "judgments": {
+        "task_success": "pass",
+        "grounded_answer": "unmeasured",
+        "no_answer_correct": "unmeasured",
+        "judgment_source": "发布后的本机Web页面实际运行成功，显示工作流终点“演示订单查询回复”，返回DEMO2026110006退款中和只读说明。Code节点参数/独立工具调用与端到端耗时不可见。"
+      },
+      "error_types": [],
+      "review_note": "发布后Web端订单查询通过；无退款/修改动作。",
+      "capture_note": "在已发布本机入口http://localhost/chat/cMZWb1TkRKpbH89p实际发送输入，捕获工作流成功、订单查询回复终点和最终结果。工具调用参数、动作日志及端到端耗时未暴露。"
+    }
+  ],
+  "count": 4,
+  "observability": "Preview and published Web runs expose final responses, citations, workflow status and order reply route. Ranked retrieval evidence, structured tool-call/action logs and end-to-end latency are unavailable."
+}
