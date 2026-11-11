@@ -15,12 +15,31 @@
 
 ## 本地准备与验证
 
-需要 Python 3.10 或以上。评估、报告和订单数据测试仅使用标准库：
+需要 Python 3.10 或以上。安装项目依赖（包含 Streamlit）：
 
 ```powershell
+python -m pip install -r requirements.txt
 python -m unittest discover -s tests -v
 python scripts/report.py
 ```
+
+## 本机 Web UI
+
+启动 Streamlit：
+
+```powershell
+streamlit run ui/app.py
+```
+
+打开终端给出的 `http://localhost:8501`。售后对话页通过服务端 `DIFY_BASE_URL`、`DIFY_API_KEY` 环境变量调用 Chatflow；Key 不在页面输入、不写浏览器端，也不应提交到 Git。PowerShell 可在启动 Streamlit 前设置环境变量：
+
+```powershell
+$env:DIFY_API_KEY = "<Dify 应用 API Key>"
+$env:DIFY_BASE_URL = "http://localhost/v1"
+streamlit run ui/app.py
+```
+
+评估报告页读取 `reports/evaluation_results.json` 与 `reports/eval_errors.csv`。缺失的检索、工具调用或延迟指标会显示为“未测量”。Web UI 的多轮会话只保存在 Streamlit 会话状态和 Dify 会话 ID 中，不使用数据库。
 
 使用 Dify API 运行少量用例：
 
@@ -48,7 +67,12 @@ enterprise-support-agent/
 ├── data/eval_cases.json
 ├── scripts/run_eval.py
 ├── scripts/report.py
+├── ui/
+│   ├── app.py
+│   ├── pages/
+│   └── services/
 ├── tests/test_orders.py
+├── tests/test_ui_services.py
 ├── reports/evaluation.md
 └── docs/
     ├── architecture.md

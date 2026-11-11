@@ -13,7 +13,6 @@ venv/
 
 # Local runtime output
 reports/live_runs.json
-reports/evaluation_results.json
 *.log
 
 # Optional demo video is normally provided separately

@@ -1,3 +1,4 @@
 # Runtime evaluation and order-data tests use the Python standard library.
 # Optional only when rebuilding or inspecting the Dify DSL locally:
 PyYAML>=6.0
+streamlit>=1.37
