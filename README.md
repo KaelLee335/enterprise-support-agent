@@ -25,13 +25,15 @@ python scripts/report.py
 
 ## 本机 Web UI
 
-启动 Streamlit：
+使用隐藏输入提示启动 Streamlit（Key 不会回显，也不会写入文件）：
 
 ```powershell
-streamlit run ui/app.py
+.\scripts\run_ui.ps1
 ```
 
-打开终端给出的 `http://localhost:8501`。售后对话页通过服务端 `DIFY_BASE_URL`、`DIFY_API_KEY` 环境变量调用 Chatflow；Key 不在页面输入、不写浏览器端，也不应提交到 Git。PowerShell 可在启动 Streamlit 前设置环境变量：
+在提示中粘贴 Dify 应用 API Key 后，打开 `http://localhost:8502`。脚本默认使用本机 Dify 的 `http://localhost/v1` 地址，也可在 PowerShell 里设置 `DIFY_BASE_URL` 后再运行。Key 仅在 Streamlit 服务进程中可用；不进入网页、不写入项目文件，服务退出后当前 PowerShell 会恢复原有环境值。端口可通过参数调整，例如 `.scripts\run_ui.ps1 -Port 8501`。
+
+也可以自行从服务端环境变量启动：
 
 ```powershell
 $env:DIFY_API_KEY = "<Dify 应用 API Key>"
