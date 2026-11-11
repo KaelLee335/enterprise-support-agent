@@ -6119,7 +6119,7 @@
       "workflow_status": "success",
       "retrieved_evidence": null,
       "displayed_citations": [],
-      "route": "direct",
+      "route": "order_reply",
       "tool_calls": null,
       "executed_actions": null,
       "unauthorized_action_count": null,
@@ -6134,7 +6134,7 @@
       },
       "error_types": [],
       "review_note": "订单查询路径回归通过，订单状态与静态演示快照一致。",
-      "capture_note": "实际预览捕获用户输入、订单结果和工作流成功的订单回复终点。Code节点参数/输出对象、动作日志和端到端耗时未读取；工作流保持未发布。"
+      "capture_note": "实际预览捕获用户输入、成功工作流和终点“演示订单查询回复”；将该可见终点记录为order_reply。Code节点参数/输出对象、动作日志和端到端耗时未读取；工作流保持未发布。"
     },
     {
       "run_id": "dify-v7.11-2026-11-11-order-web",
