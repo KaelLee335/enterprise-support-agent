@@ -5,12 +5,15 @@ param(
 $ErrorActionPreference = 'Stop'
 $previousApiKey = $env:DIFY_API_KEY
 $previousBaseUrl = $env:DIFY_BASE_URL
-$secureKey = Read-Host 'Paste the Dify app API key (input is hidden)' -AsSecureString
 $keyPointer = [IntPtr]::Zero
+$secureKey = $null
 
 try {
-    $keyPointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureKey)
-    $env:DIFY_API_KEY = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($keyPointer)
+    if ([string]::IsNullOrWhiteSpace($env:DIFY_API_KEY)) {
+        $secureKey = Read-Host 'Paste the Dify app API key (input is hidden)' -AsSecureString
+        $keyPointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureKey)
+        $env:DIFY_API_KEY = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($keyPointer)
+    }
     if ([string]::IsNullOrWhiteSpace($env:DIFY_API_KEY)) {
         throw 'The API key cannot be empty.'
     }

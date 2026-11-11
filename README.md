@@ -25,13 +25,19 @@ python scripts/report.py
 
 ## 本机 Web UI
 
-使用隐藏输入提示启动 Streamlit（Key 不会回显，也不会写入文件）：
+首次配置时验证并保存 Dify 应用 Key 到当前 Windows 用户环境变量（隐藏输入；不写入项目文件）：
+
+```powershell
+.\scripts\configure_api_key.ps1
+```
+
+之后直接启动（无需再次输入 Key）：
 
 ```powershell
 .\scripts\run_ui.ps1
 ```
 
-在提示中粘贴 Dify 应用 API Key 后，打开 `http://localhost:8502`。脚本默认使用本机 Dify 的 `http://localhost/v1` 地址，也可在 PowerShell 里设置 `DIFY_BASE_URL` 后再运行。Key 仅在 Streamlit 服务进程中可用；不进入网页、不写入项目文件，服务退出后当前 PowerShell 会恢复原有环境值。端口可通过参数调整，例如 `.scripts\run_ui.ps1 -Port 8501`。
+配置脚本会先请求 Dify `/parameters` 验证 Key；验证失败时不会保存。启动后打开 `http://localhost:8502`。默认 Dify 地址为 `http://localhost/v1`；如需自定义，请先设置 `DIFY_BASE_URL` 再运行配置脚本。Key 只交给服务端进程，不进入网页或 Git。端口可通过参数调整，例如 `.\scripts\run_ui.ps1 -Port 8501`。
 
 也可以自行从服务端环境变量启动：
 
