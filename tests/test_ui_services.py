@@ -41,6 +41,13 @@ class DifyClientTests(unittest.TestCase):
             with self.assertRaises(DifyClientError): DifyClient().chat("hello")
             urlopen.assert_not_called()
 
+    @patch("ui.services.dify_client.urllib.request.urlopen")
+    def test_defaults_to_local_dify_api_endpoint(self, urlopen):
+        urlopen.return_value = FakeResponse({"answer": "ok"})
+        with patch.dict("os.environ", {"DIFY_API_KEY": "server-secret", "DIFY_BASE_URL": ""}):
+            DifyClient().chat("hello")
+        self.assertEqual(urlopen.call_args.args[0].full_url, "http://127.0.0.1:5001/v1/chat-messages")
+
 
 class EvaluationAdapterTests(unittest.TestCase):
     def test_loads_json_and_csv(self):
