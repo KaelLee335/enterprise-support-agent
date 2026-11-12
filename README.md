@@ -1,45 +1,57 @@
 # Enterprise Support Agent
 
-基于 Dify Chatflow 的企业售后服务智能体演示项目。政策、企业、产品和订单均为虚构演示数据，不适用于真实交易；查询只读，没有真实退款、订单修改或人工转接能力。
+**一个面向企业售后场景的 AI Agent 项目演示。** 它将售后政策检索、只读订单查询和安全边界处理放进同一条 Dify Chatflow，并通过 Python 评估脚本与 Streamlit 页面展示运行过程。
 
-## 功能
+项目重点是把一个常见的“能回答”客服机器人做得更可检查：回答尽量引用政策依据；订单查询只读取模拟数据；证据不足或请求超出权限时明确说明；评估报告区分已观测数据和未测量指标。
 
-- 使用 Dify 知识库回答售后政策问题并展示来源。
-- 查询 20 条演示订单，覆盖待付款、处理中、已发货、已完成、退款中、已退款、已取消等状态。
-- 证据不足或超出授权范围时明确说明；演示订单逻辑不执行写操作。
-- 提供 45 条分类测试规格、Dify API 运行脚本和按分类汇总的评估报告。
+> **演示范围：** 企业、政策、产品和订单均为虚构资料。系统不连接真实客户或订单，不会执行退款、修改订单，也没有真实人工转接能力。仓库提供本地演示所需代码和数据；Dify 服务与模型需由使用者自行配置。
 
-## 本机演示
+## 项目亮点
 
-已发布并验证的本机 Dify v7.11（app ID `3d9fdda7-9598-4a12-94bd-070cc2d1b5a8`）Web 入口：<http://localhost/chat/cMZWb1TkRKpbH89p>。需要本机 Dify 服务在线。该地址只在当前本机环境可访问，不是公网网站。导入前请按 `docs/dify_setup.md` 创建/绑定知识库；DSL 的知识库引用依赖目标 Dify 实例，文档数据需单独上传。
+- **政策 RAG：** 基于 Dify 知识库回答退换货、保修、物流、退款等售后问题，并展示 API 实际返回的知识库引用（若有）。
+- **只读订单查询：** 查询 20 条固定演示订单，覆盖待付款、处理中、已发货、已完成、退款中、已退款和已取消等状态。
+- **边界处理：** 对知识库无法确认的内容作出说明；拒绝退款、改地址等未授权操作，不把建议联系人工描述成已经转接。
+- **评估与可观测性：** 提供 45 条分类测试规格、Dify API 运行脚本和报告生成器。缺少检索证据或工具调用日志时显示“未测量”，不从最终答复猜测中间执行情况。
+- **本地演示 UI：** Streamlit 提供多轮售后对话与评估报告两个页面，Dify API Key 保留在服务端环境变量中。
 
-## 本地准备与验证
+## 架构概览
 
-需要 Python 3.10 或以上。安装项目依赖（包含 Streamlit）：
+```text
+浏览器
+  └─ Streamlit 演示界面
+       └─ Dify Chatflow API
+            ├─ 政策问题 → Dify 知识库检索 → 答案与可用引用
+            └─ 订单问题 → 确定性只读查询 → 固定模拟订单
 
-```powershell
-python -m pip install -r requirements.txt
-python -m unittest discover -s tests -v
-python scripts/report.py
+Python 评估脚本 → Dify API → JSON 运行记录 → 报告生成器
 ```
 
-## 本机 Web UI
+项目有意保持轻量：不额外引入数据库、微服务或 Agent 框架。完整设计和观测边界见 [`docs/architecture.md`](docs/architecture.md)；Dify 工作流与知识库复现步骤见 [`docs/dify_setup.md`](docs/dify_setup.md)。
 
-首次配置时验证并保存 Dify 应用 Key 到当前 Windows 用户环境变量（隐藏输入；不写入项目文件）：
+## 快速开始
+
+### 1. 准备 Dify
+
+本项目需要一个可访问的 Dify 实例、已配置模型的 Chatflow 应用，以及已导入的演示政策知识库。导入 DSL 不会自动复制知识库文件或索引；请按 [`docs/dify_setup.md`](docs/dify_setup.md) 配置。工作流文件位于 [`dify/support-agent.yml`](dify/support-agent.yml)。
+
+### 2. 安装并运行本地界面
+
+需要 Python 3.10 或以上。Windows PowerShell 示例：
+
+```powershell
+git clone https://github.com/KaelLee335/enterprise-support-agent.git
+cd enterprise-support-agent
+python -m pip install -r requirements.txt
+```
+
+配置 Dify Chatflow 应用 API Key。推荐使用隐藏输入并验证 Key 的脚本：
 
 ```powershell
 .\scripts\configure_api_key.ps1
-```
-
-之后直接启动（无需再次输入 Key）：
-
-```powershell
 .\scripts\run_ui.ps1
 ```
 
-配置脚本会先请求 Dify `/parameters` 验证 Key；验证失败时不会保存。启动后打开 `http://localhost:8502`。此 Docker Compose 部署由 nginx 在主机 80 端口反代到容器内 API 5001 端口，因此本机默认 Dify API 地址为 `http://localhost/v1`；如需自定义，请先设置 `DIFY_BASE_URL` 再运行配置脚本。Key 只交给服务端环境变量，不进入网页或 Git。端口可通过参数调整，例如 `.\scripts\run_ui.ps1 -Port 8501`。
-
-也可以自行从服务端环境变量启动：
+浏览器打开 <http://localhost:8502>。脚本将 Key 保存到当前 Windows 用户环境变量，不写入项目文件。也可按自身环境直接设置服务端变量并启动：
 
 ```powershell
 $env:DIFY_API_KEY = "<Dify 应用 API Key>"
@@ -47,56 +59,46 @@ $env:DIFY_BASE_URL = "http://localhost/v1"
 streamlit run ui/app.py
 ```
 
-评估报告页读取 `reports/evaluation_results.json` 与 `reports/eval_errors.csv`。缺失的检索、工具调用或延迟指标会显示为“未测量”。Web UI 的多轮会话只保存在 Streamlit 会话状态和 Dify 会话 ID 中，不使用数据库。
+`http://localhost/v1` 仅适用于本地 Dify 经 nginx 暴露在主机 80 端口的部署；其他部署请设置正确的 `DIFY_BASE_URL`。API Key 不要提交到 Git，也不要写进截图或演示视频。
 
-## 最终交付与演示
+### 3. 运行检查与生成报告
 
-本项目的必交付目标是公开 GitHub 仓库和可在本机运行的演示；公网 Web Demo 属于可选项。演示范围包括 Python 代码、Dify 工作流、模拟数据、评估报告和 README。录制时请按 [`docs/demo_script.md`](docs/demo_script.md) 操作，并只展示虚构演示数据。
+```powershell
+python -m unittest discover -s tests -v
+python scripts/report.py
+```
 
-当前仓库尚未包含 `docs/demo.mp4` 或产品界面截图。录屏前需先启动本机 Dify 和 Streamlit，再用 OBS 录制并将成片保存为 `docs/demo.mp4`。截图可保存到 `docs/screenshots/`。开始录制前请确认 OBS 只采集演示浏览器窗口；全屏采集可能录入其他桌面内容。录制后检查画面未包含 API Key、账号信息或系统通知再提交。
-
-使用 Dify API 运行少量用例：
-
-1. 在 Dify 为目标 Chatflow 创建应用 API Key。
-2. 复制 `.env.example` 为 `.env` 并填写本机 Dify 地址、应用 Key。不要提交 `.env`。
-3. 指定用例运行；默认最多3条，避免意外批量调用：
+可通过 Dify API 运行指定测试案例。默认限制单次最多 3 条，避免意外批量调用：
 
 ```powershell
 python scripts/run_eval.py --case-id NA-02 --case-id CP-03 --case-id MVP-V76-ORDER
 ```
 
-脚本会保存实际输入、输出、API 可返回的检索证据和客户端耗时到 `reports/live_runs.json`。未由 API 明确提供的路由、工具调用及写操作日志保持未测量。模型调用可能按 Dify/模型供应方账户配置计费。
+脚本从当前环境变量读取 `DIFY_API_KEY` 和 `DIFY_BASE_URL`，并将实际输入、输出、API 返回的检索证据和客户端耗时保存到 `reports/live_runs.json`。模型调用费用取决于 Dify 和模型供应方账户配置。
 
-## 目录
+## 评估结果如何阅读
+
+测试集包含 **45 条测试规格**，历史报告累计 **127 条运行记录**，覆盖多个工作流迭代版本。当前报告中的 `v7.11` 记录为 **4/4 Task Success**；样本量很小，只能说明这几次记录的结果，不能代表总体效果。
+
+评估报告还包含 Evidence Hit@3、Grounded Answer Rate、拒答正确性、路由、工具准确率、未经授权操作和客户端延迟等指标。不同运行未必捕获了所有中间数据；缺数据时报告标注“未测量”。特别是 Dify API 未返回结构化工具调用时，不会根据回答文本判断工具是否真的执行。详见 [`reports/evaluation.md`](reports/evaluation.md) 和 [`reports/eval_errors.csv`](reports/eval_errors.csv)。
+
+## 演示方式
+
+项目目标是公开代码仓库加本地运行演示，不依赖公网 Demo。录制步骤见 [`docs/demo_script.md`](docs/demo_script.md)。目前仓库未包含产品截图或 `docs/demo.mp4`；录制时请使用虚构数据，并确认 OBS 只采集演示窗口，不包含其他桌面内容、账号或密钥。
+
+## 项目结构
 
 ```text
 enterprise-support-agent/
-├── README.md
-├── .gitignore
-├── .env.example
-├── requirements.txt
-├── dify/support-agent.yml
-├── data/knowledge/
-├── data/orders.json
-├── data/eval_cases.json
-├── scripts/run_eval.py
-├── scripts/report.py
-├── ui/
-│   ├── app.py
-│   ├── pages/
-│   └── services/
-├── tests/test_orders.py
-├── tests/test_ui_services.py
-├── reports/evaluation.md
-└── docs/
-    ├── architecture.md
-    ├── dify_setup.md
-    ├── demo_script.md
-    └── screenshots/
+├── data/                 # 模拟售后政策、订单与测试用例
+├── dify/                 # Dify Chatflow DSL
+├── docs/                 # 架构、Dify 配置与演示录制说明
+├── reports/              # 评估汇总、错误明细与运行记录
+├── scripts/              # API 评估、报告和本地启动脚本
+├── tests/                # Python 测试
+└── ui/                   # Streamlit 对话和评估页面
 ```
-
-`reports/evaluation_runs.json` 保留历史运行轨迹。评估报告只展示真实保存的指标；缺少中间执行数据的指标会标为“未测量”。
 
 ## License
 
-This project is provided under the [MIT License](LICENSE).
+本项目采用 [MIT License](LICENSE)。
