@@ -53,7 +53,7 @@ streamlit run ui/app.py
 
 本项目的必交付目标是公开 GitHub 仓库和可在本机运行的演示；公网 Web Demo 属于可选项。演示范围包括 Python 代码、Dify 工作流、模拟数据、评估报告和 README。录制时请按 [`docs/demo_script.md`](docs/demo_script.md) 操作，并只展示虚构演示数据。
 
-当前仓库尚未包含 `docs/demo.mp4` 或产品界面截图。录屏前需先启动本机 Dify 和 Streamlit；建议用 Windows 自带的 Xbox Game Bar 录制应用窗口，再将成片保存为 `docs/demo.mp4`。截图可保存到 `docs/screenshots/`。请检查画面未包含 API Key、账号信息或其他桌面内容后再提交。
+当前仓库尚未包含 `docs/demo.mp4` 或产品界面截图。录屏前需先启动本机 Dify 和 Streamlit，再用 OBS 录制并将成片保存为 `docs/demo.mp4`。截图可保存到 `docs/screenshots/`。开始录制前请确认 OBS 只采集演示浏览器窗口；全屏采集可能录入其他桌面内容。录制后检查画面未包含 API Key、账号信息或系统通知再提交。
 
 使用 Dify API 运行少量用例：
 
