@@ -17,6 +17,11 @@ def _render_message(message: dict) -> None:
                     st.markdown(f"**{title}** · rank {citation.get('position', '未提供')} · score {citation.get('score', '未提供')}")
                     if citation.get("content"):
                         st.caption(citation["content"])
+        elif message["role"] == "assistant" and not message.get("error"):
+            if message.get("retrieval_metadata_available"):
+                st.caption("本轮 Dify 返回了检索字段，但没有可展示的知识库引用。")
+            else:
+                st.caption("本轮 Dify 未返回检索证据元数据；不能据此判断是否命中知识库。")
         if message.get("tool_calls"):
             with st.expander(f"API 返回的工具调用记录（{len(message['tool_calls'])}）"):
                 st.json(message["tool_calls"])
@@ -53,7 +58,8 @@ def render() -> None:
             result = client.chat(prompt, st.session_state.dify_conversation_id)
         st.session_state.dify_conversation_id = result.conversation_id
         message = {"role": "assistant", "content": result.answer,
-                   "citations": result.citations, "tool_calls": result.tool_calls}
+                   "citations": result.citations, "tool_calls": result.tool_calls,
+                   "retrieval_metadata_available": result.retrieval_metadata_available}
         _render_message(message)
         st.session_state.chat_messages.append(message)
     except DifyClientError as exc:

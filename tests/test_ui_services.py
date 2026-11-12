@@ -26,7 +26,15 @@ class DifyClientTests(unittest.TestCase):
         self.assertEqual(request.get_header("Authorization"), "Bearer server-secret")
         self.assertEqual(result.conversation_id, "conv-1")
         self.assertEqual(result.citations[0]["document_name"], "POL-06")
+        self.assertTrue(result.retrieval_metadata_available)
         self.assertIsNone(result.tool_calls)
+
+    @patch("ui.services.dify_client.urllib.request.urlopen")
+    def test_distinguishes_missing_retrieval_metadata(self, urlopen):
+        urlopen.return_value = FakeResponse({"answer": "无法确认。", "metadata": {}})
+        result = DifyClient("http://dify/v1", "server-secret").chat("退货期限？")
+        self.assertFalse(result.retrieval_metadata_available)
+        self.assertEqual(result.citations, [])
 
     def test_missing_key_fails_without_request(self):
         with patch.dict("os.environ", {"DIFY_API_KEY": ""}), patch("ui.services.dify_client.urllib.request.urlopen") as urlopen:

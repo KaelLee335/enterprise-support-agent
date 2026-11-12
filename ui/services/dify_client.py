@@ -20,6 +20,7 @@ class ChatResult:
     conversation_id: str | None
     citations: list[dict[str, Any]]
     tool_calls: list[dict[str, Any]] | None
+    retrieval_metadata_available: bool
 
 
 class DifyClient:
@@ -66,11 +67,16 @@ class DifyClient:
         metadata = result.get("metadata") or {}
         if not isinstance(metadata, dict):
             metadata = {}
+        retrieval_metadata_available = "retriever_resources" in metadata
         citations = metadata.get("retriever_resources")
         tool_calls = metadata.get("tool_calls")
         answer = result.get("answer")
         if not isinstance(answer, str):
             raise DifyClientError("Dify 响应中没有可显示的 answer 字段。")
-        return ChatResult(answer, result.get("conversation_id") or conversation_id,
-                          [item for item in citations if isinstance(item, dict)] if isinstance(citations, list) else [],
-                          [item for item in tool_calls if isinstance(item, dict)] if isinstance(tool_calls, list) else None)
+        return ChatResult(
+            answer=answer,
+            conversation_id=result.get("conversation_id") or conversation_id,
+            citations=[item for item in citations if isinstance(item, dict)] if isinstance(citations, list) else [],
+            tool_calls=[item for item in tool_calls if isinstance(item, dict)] if isinstance(tool_calls, list) else None,
+            retrieval_metadata_available=retrieval_metadata_available,
+        )
