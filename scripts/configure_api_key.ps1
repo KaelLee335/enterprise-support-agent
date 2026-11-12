@@ -13,7 +13,7 @@ try {
 
     $baseUrl = $env:DIFY_BASE_URL
     if ([string]::IsNullOrWhiteSpace($baseUrl)) {
-        $baseUrl = 'http://127.0.0.1:5001/v1'
+        $baseUrl = 'http://localhost/v1'
     }
     $baseUrl = $baseUrl.TrimEnd('/')
     $parametersUrl = if ($baseUrl.EndsWith('/parameters')) { $baseUrl } else { "$baseUrl/parameters" }

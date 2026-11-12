@@ -26,7 +26,7 @@ class ChatResult:
 class DifyClient:
     def __init__(self, base_url: str | None = None, api_key: str | None = None,
                  user_id: str | None = None, timeout: float = 60.0):
-        configured_base_url = base_url or os.getenv("DIFY_BASE_URL") or "http://127.0.0.1:5001/v1"
+        configured_base_url = base_url or os.getenv("DIFY_BASE_URL") or "http://localhost/v1"
         self.base_url = configured_base_url.rstrip("/")
         self.api_key = api_key if api_key is not None else os.getenv("DIFY_API_KEY", "")
         self.user_id = user_id or os.getenv("DIFY_USER_ID", "enterprise-support-web-demo")

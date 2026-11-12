@@ -37,7 +37,7 @@ python scripts/report.py
 .\scripts\run_ui.ps1
 ```
 
-配置脚本会先请求 Dify `/parameters` 验证 Key；验证失败时不会保存。启动后打开 `http://localhost:8502`。默认 Dify API 地址为 `http://127.0.0.1:5001/v1`；如需自定义，请先设置 `DIFY_BASE_URL` 再运行配置脚本。Key 只交给服务端环境变量，不进入网页或 Git。端口可通过参数调整，例如 `.\scripts\run_ui.ps1 -Port 8501`。
+配置脚本会先请求 Dify `/parameters` 验证 Key；验证失败时不会保存。启动后打开 `http://localhost:8502`。此 Docker Compose 部署由 nginx 在主机 80 端口反代到容器内 API 5001 端口，因此本机默认 Dify API 地址为 `http://localhost/v1`；如需自定义，请先设置 `DIFY_BASE_URL` 再运行配置脚本。Key 只交给服务端环境变量，不进入网页或 Git。端口可通过参数调整，例如 `.\scripts\run_ui.ps1 -Port 8501`。
 
 也可以自行从服务端环境变量启动：
 

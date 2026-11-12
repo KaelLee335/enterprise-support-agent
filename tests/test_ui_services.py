@@ -46,7 +46,7 @@ class DifyClientTests(unittest.TestCase):
         urlopen.return_value = FakeResponse({"answer": "ok"})
         with patch.dict("os.environ", {"DIFY_API_KEY": "server-secret", "DIFY_BASE_URL": ""}):
             DifyClient().chat("hello")
-        self.assertEqual(urlopen.call_args.args[0].full_url, "http://127.0.0.1:5001/v1/chat-messages")
+        self.assertEqual(urlopen.call_args.args[0].full_url, "http://localhost/v1/chat-messages")
 
 
 class EvaluationAdapterTests(unittest.TestCase):
