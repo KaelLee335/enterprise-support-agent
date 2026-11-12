@@ -49,6 +49,12 @@ streamlit run ui/app.py
 
 评估报告页读取 `reports/evaluation_results.json` 与 `reports/eval_errors.csv`。缺失的检索、工具调用或延迟指标会显示为“未测量”。Web UI 的多轮会话只保存在 Streamlit 会话状态和 Dify 会话 ID 中，不使用数据库。
 
+## 最终交付与演示
+
+本项目的必交付目标是公开 GitHub 仓库和可在本机运行的演示；公网 Web Demo 属于可选项。演示范围包括 Python 代码、Dify 工作流、模拟数据、评估报告和 README。录制时请按 [`docs/demo_script.md`](docs/demo_script.md) 操作，并只展示虚构演示数据。
+
+当前仓库尚未包含 `docs/demo.mp4` 或产品界面截图。录屏前需先启动本机 Dify 和 Streamlit；建议用 Windows 自带的 Xbox Game Bar 录制应用窗口，再将成片保存为 `docs/demo.mp4`。截图可保存到 `docs/screenshots/`。请检查画面未包含 API Key、账号信息或其他桌面内容后再提交。
+
 使用 Dify API 运行少量用例：
 
 1. 在 Dify 为目标 Chatflow 创建应用 API Key。
@@ -85,10 +91,11 @@ enterprise-support-agent/
 └── docs/
     ├── architecture.md
     ├── dify_setup.md
+    ├── demo_script.md
     └── screenshots/
 ```
 
-`reports/evaluation_runs.json` 保留历史运行轨迹；视频为可选项，当前未提供演示视频。截图目录含说明，实际产品截图仍待补入。
+`reports/evaluation_runs.json` 保留历史运行轨迹。评估报告只展示真实保存的指标；缺少中间执行数据的指标会标为“未测量”。
 
 ## License
 
