@@ -3,6 +3,34 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+$serverUrl = "http://localhost:$Port"
+$portProbe = [System.Net.Sockets.TcpClient]::new()
+try {
+    $connectTask = $portProbe.ConnectAsync('127.0.0.1', $Port)
+    $portInUse = $connectTask.Wait(700) -and $portProbe.Connected
+}
+catch {
+    $portInUse = $false
+}
+finally {
+    $portProbe.Dispose()
+}
+
+if ($portInUse) {
+    try {
+        $existingPage = Invoke-WebRequest -Uri $serverUrl -TimeoutSec 3 -UseBasicParsing
+        if ($existingPage.StatusCode -eq 200 -and $existingPage.Content -match 'streamlit') {
+            Start-Process -FilePath $serverUrl
+            "Streamlit is already running at $serverUrl; opened the existing demo."
+            return
+        }
+    }
+    catch {
+        # Report the occupied port below without exposing response details.
+    }
+    throw "Port $Port is already in use by another process. Stop it or choose another port with -Port."
+}
+
 $previousApiKey = $env:DIFY_API_KEY
 $previousBaseUrl = $env:DIFY_BASE_URL
 $keyPointer = [IntPtr]::Zero
